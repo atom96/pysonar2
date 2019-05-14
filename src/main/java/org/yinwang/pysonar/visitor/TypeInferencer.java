@@ -1171,7 +1171,6 @@ public class TypeInferencer implements Visitor1<Type, State> {
                             @Nullable Map<String, Type> hash,
                             @Nullable Type kw,
                             @Nullable Type star) {
-
         List<Node> args = func.args;
         Name rest = func.vararg;
         Name restKw = func.kwarg;
@@ -1191,8 +1190,15 @@ public class TypeInferencer implements Visitor1<Type, State> {
             Type aType;
             if (i < aSize) {
                 aType = pTypes.get(i);
-            } else if (i - nPos >= 0 && i - nPos < dSize) {
-                aType = dTypes.get(i - nPos);
+            } else if ((i - nPos >= 0) && (i - nPos < dSize)) {
+                String argName = func.args.get(i).name;
+
+                if (hash != null && hash.containsKey(argName)) {
+                    aType = hash.get(((Name) args.get(i)).id);
+                    hash.remove(((Name) args.get(i)).id);
+                } else {
+                    aType = dTypes.get(i - nPos);
+                }
             } else {
                 if (hash != null && args.get(i) instanceof Name &&
                     hash.containsKey(((Name) args.get(i)).id)) {
