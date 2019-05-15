@@ -805,7 +805,7 @@ public class Builtins {
             addClass("float", newLibUrl("functions", "float"), Types.FloatClass);
                 addClass("complex", newLibUrl("functions", "complex"), Types.ComplexClass);
 
-            addClass("None", newLibUrl("constants", "None"), Types.NoneInstance);
+            addClass("None", newLibUrl("constants", "NoneType"), Types.NoneInstance);
 
             addClass("dict", newLibUrl("stdtypes", "typesmapping"), Types.BaseDict);
             addFunction("file", newLibUrl("functions", "file"), BaseFileInst);
@@ -861,7 +861,7 @@ public class Builtins {
 
             addAttr("True", newLibUrl("constants", "True"), Types.BoolInstance);
             addAttr("False", newLibUrl("constants", "False"), Types.BoolInstance);
-            addAttr("None", newLibUrl("constants", "None"), Types.NoneInstance);
+            addAttr("None", newLibUrl("constants", "NoneType"), Types.NoneInstance);
             addFunction("open", newTutUrl("inputoutput.html#reading-and-writing-files"), BaseFileInst);
             addFunction("__import__", newLibUrl("functions", "__import__"), newModule("<?>"));
 

@@ -187,14 +187,14 @@ public class UnionType extends Type {
             int newNum = ctr.push(this);
             List<String> typeStrings = types.stream().map(x->x.printType(ctr)).collect(Collectors.toList());
             Collections.sort(typeStrings);
-            sb.append("{");
-            sb.append(String.join(" | ", typeStrings));
+            sb.append("Union[");
+            sb.append(String.join(", ", typeStrings));
 
             if (ctr.isUsed(this)) {
                 sb.append("=#").append(newNum).append(":");
             }
 
-            sb.append("}");
+            sb.append("]");
             ctr.pop(this);
         }
 

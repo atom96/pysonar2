@@ -4,9 +4,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.yinwang.pysonar.*;
 import org.yinwang.pysonar.ast.Node;
-import org.yinwang.pysonar.types.ModuleType;
-import org.yinwang.pysonar.types.Type;
-import org.yinwang.pysonar.types.UnionType;
+import org.yinwang.pysonar.ast.Tuple;
+import org.yinwang.pysonar.types.*;
 
 import java.io.File;
 import java.util.*;
@@ -126,7 +125,9 @@ class Linker {
 
 
     void processRef(@NotNull Node ref, @NotNull List<Binding> bindings) {
-        String qname = bindings.iterator().next().qname;
+        Binding bbb =  bindings.iterator().next();
+        String qname =bbb.qname;
+        String name = bbb.name;
         int hash = ref.hashCode();
 
         if (!seenRef.contains(hash)) {
@@ -136,6 +137,60 @@ class Linker {
             link.id = qname;
 
             List<Type> types = bindings.stream().map(b -> b.type).collect(Collectors.toList());
+
+
+
+            for(Type t: types) {
+                if (t instanceof FunType) {
+
+
+                    String[] a = new String[6];
+
+                    int  x = Demo.rootPath.length();
+                    if (qname.startsWith(Demo.rootPath.replace('/', '.'))) {
+                        qname = qname.substring(x + 1);
+                    }
+
+
+                    FunType fun = (FunType) t;
+
+                    a[0] = qname;
+                    List<String> resultTypes = new ArrayList<>();
+                    Map<String, List<String>> paramTypes = new HashMap<>();
+
+
+                    for (Map.Entry<Type, Type> e : fun.arrows.entrySet()) {
+                        resultTypes.add(e.getValue().toString());
+
+                        Type vals = e.getKey();
+                        if (vals instanceof TupleType) {
+                            TupleType params = (TupleType) vals;
+                            String paramsStr = "{";
+
+                            if (fun.func.args.size() < params.eltTypes.size()) {
+                                $.msg("Error, in function " + qname + " " + String.join(",", params.eltTypes.stream().map(Type::toString).collect(Collectors.joining())));
+                            }
+
+                            for(int i = 0; i < params.eltTypes.size(); ++i) {
+
+                                String paramName = fun.func.args.get(i).name;
+
+                                String paramType = params.eltTypes.get(i).toString();
+                                String end = i == params.eltTypes.size() - 1 ? "" : ",";
+                                paramsStr += "\\\"" + paramName + "\\\": \\\"" + paramType + "\\\"" + end;
+                            }
+                            paramsStr += "}";
+
+
+                            Demo.functionCalls.add(qname + '|' + paramsStr + '|' + e.getValue());
+                        }
+
+                    }
+                }
+            }
+
+            //System.out.println(qname + " " + UnionType.union(types).toString());
+
             link.message = UnionType.union(types).toString();
 
             // Currently jump to the first binding only. Should change to have a

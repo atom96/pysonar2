@@ -96,7 +96,7 @@ public class ListType extends Type {
             sb.append("#").append(num);
         } else {
             ctr.push(this);
-            sb.append("[");
+            sb.append("List[");
             sb.append(eltType.printType(ctr));
             sb.append("]");
             ctr.pop(this);

@@ -61,23 +61,22 @@ public class DictType extends Type {
 
     @Override
     protected String printType(@NotNull CyclicTypeRecorder ctr) {
-//        StringBuilder sb = new StringBuilder();
-//
-//        Integer num = ctr.visit(this);
-//        if (num != null) {
-//            sb.append("#").append(num);
-//        } else {
-//            ctr.push(this);
-//            sb.append("{");
-//            sb.append(keyType.printType(ctr));
-//            sb.append(" : ");
-//            sb.append(valueType.printType(ctr));
-//            sb.append("}");
-//            ctr.pop(this);
-//        }
-//
-//        return sb.toString();
-        return "dict";
+        StringBuilder sb = new StringBuilder();
+
+        Integer num = ctr.visit(this);
+        if (num != null) {
+            sb.append("#").append(num);
+        } else {
+            ctr.push(this);
+            sb.append("Dict[");
+            sb.append(keyType.printType(ctr));
+            sb.append(", ");
+            sb.append(valueType.printType(ctr));
+            sb.append("]");
+            ctr.pop(this);
+        }
+
+        return sb.toString();
     }
 
 }

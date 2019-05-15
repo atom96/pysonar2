@@ -21,7 +21,8 @@ public class Demo {
     private static final String JS_DEBUG = $.readResource("org/yinwang/pysonar/javascript/highlight-debug.js");
 
     private Analyzer analyzer;
-    private String rootPath;
+    public static String rootPath;
+    public static List<String> functionCalls= new ArrayList();
     private Linker linker;
 
 
@@ -69,31 +70,11 @@ public class Demo {
 
         int rootLength = rootPath.length();
 
-        int total = 0;
-        for (String path : analyzer.getLoadedFiles()) {
-            if (path.startsWith(rootPath)) {
-                total++;
-            }
-        }
+        String output = OUTPUT_DIR + "/calls.csv";
 
-        Progress progress = new Progress(total, 50);
+        $.writeFile(output, String.join("\n", functionCalls));
 
-        for (String path : analyzer.getLoadedFiles()) {
-            if (path.startsWith(rootPath)) {
-                progress.tick();
-                File destFile = $.joinPath(OUTPUT_DIR, path.substring(rootLength));
-                destFile.getParentFile().mkdirs();
-                String destPath = destFile.getAbsolutePath() + ".html";
-                String html = markup(path);
-                try {
-                    $.writeFile(destPath, html);
-                } catch (Exception e) {
-                    $.msg("Failed to write: " + destPath);
-                }
-            }
-        }
-
-        $.msg("\nWrote " + analyzer.getLoadedFiles().size() + " files to " + OUTPUT_DIR);
+        $.msg("\nWrote calls to " + OUTPUT_DIR);
     }
 
 
@@ -173,7 +154,10 @@ public class Demo {
 
         List<String> argsList = options.getArgs();
         String fileOrDir = argsList.get(0);
-        OUTPUT_DIR = new File(argsList.get(1));
+        if (args.length == 1)
+            OUTPUT_DIR = new File(fileOrDir);
+        else
+            OUTPUT_DIR = new File(argsList.get(1));
 
 //        System.out.println("options: " + options.getOptionsMap());
         new Demo().start(fileOrDir, options.getOptionsMap());

@@ -466,7 +466,7 @@ public class Parser {
             String strVal;
             Object value = map.get("value");
             if (value == null) {
-                strVal = "None";
+                strVal = "NoneType";
             } else if (value instanceof Boolean) {
                 strVal = ((Boolean) value) ? "True" : "False";
             } else if (value instanceof String) {

@@ -2,7 +2,6 @@ package org.yinwang.pysonar.types;
 
 import org.jetbrains.annotations.NotNull;
 import org.yinwang.pysonar.Analyzer;
-import org.yinwang.pysonar.TypeStack;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -118,7 +117,7 @@ public class TupleType extends Type {
             int newNum = ctr.push(this);
             boolean first = true;
             if (eltTypes.size() != 1) {
-                sb.append("(");
+                sb.append("Tuple[");
             }
 
             for (Type t : eltTypes) {
@@ -134,7 +133,7 @@ public class TupleType extends Type {
             }
 
             if (eltTypes.size() != 1) {
-                sb.append(")");
+                sb.append("]");
             }
             ctr.pop(this);
         }

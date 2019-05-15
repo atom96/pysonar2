@@ -25,13 +25,13 @@ public class Types {
     public static ClassType ComplexClass = new ClassType("complex", null, ObjectClass);
     public static Type ComplexInstance = ComplexClass.getInstance();
 
-    public static ClassType NoneClass = new ClassType("None", null, ObjectClass);
+    public static ClassType NoneClass = new ClassType("NoneType", null, ObjectClass);
     public static Type NoneInstance = NoneClass.getInstance();
 
     // Synthetic types used only for inference purposes
     // They don't exist in Python
     public static Type UNKNOWN = new InstanceType(new ClassType("?", null, ObjectClass));
-    public static Type CONT = new InstanceType(new ClassType("None", null, null));
+    public static Type CONT = new InstanceType(new ClassType("NoneType", null, null));
 
-    public static ClassType BaseDict = new ClassType("dict", null, ObjectClass);
+    public static ClassType BaseDict = new ClassType("Dict", null, ObjectClass);
 }
