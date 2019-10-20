@@ -100,9 +100,9 @@ public class $ {
     public static String moduleQname(@NotNull String file) {
         File f = new File(file);
 
-        if (f.getName().endsWith("__init__.py")) {
+        /*if (f.getName().endsWith("__init__.py")) {
             file = f.getParent();
-        } else if (file.endsWith(Globals.FILE_SUFFIX)) {
+        } else*/ if (file.endsWith(Globals.FILE_SUFFIX)) {
             file = file.substring(0, file.length() - Globals.FILE_SUFFIX.length());
         }
 

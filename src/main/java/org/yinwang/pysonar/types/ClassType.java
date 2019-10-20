@@ -71,6 +71,6 @@ public class ClassType extends Type {
 
     @Override
     protected String printType(CyclicTypeRecorder ctr) {
-        return "<" + name + ">";
+        return "Type[" + name + "]";
     }
 }

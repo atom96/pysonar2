@@ -197,30 +197,59 @@ public class FunType extends Type {
             int i = 0;
             Set<String> seen = new HashSet<>();
 
+
+//            Set<String> params = new HashSet<>();
+//            Set<String> values = new HashSet<>();
+//            for (Map.Entry<Type, Type> e : arrows.entrySet()) {
+//                System.out.println(e.getKey().getClass());
+//                params.add(e.getKey().printType(ctr));
+//                values.add(e.getValue().printType(ctr));
+//            }
+//
+//            String p;
+//            if (params.size() > 1)
+//                p = "Union[" + String.join(",", params) + "]";
+//            else
+//                p = params.iterator().next();
+//
+//            String v;
+//            if (values.size() > 1)
+//                v = "Union[" + String.join(",", values) + "]";
+//            else
+//                v = params.iterator().next();
+//            sb.append(p + "->" + v);
+//
+//        }
+
+
             for (Map.Entry<Type, Type> e : arrows.entrySet()) {
                 Type from = e.getKey();
                 String as = from.printType(ctr) + " -> " + e.getValue().printType(ctr);
 
-                if (!seen.contains(as)) {
-                    if (i != 0) {
-                        if (Analyzer.self.multilineFunType) {
-                            sb.append("\n/ ");
-                        } else {
-                            sb.append(" / ");
-                        }
-                    }
+                seen.add(as);
 
-                    sb.append(as);
-                    seen.add(as);
-                }
-
-                i++;
+//                if (!seen.contains(as)) {
+//                    if (i != 0) {
+//                        if (Analyzer.self.multilineFunType) {
+//                            sb.append("\n/ ");
+//                        } else {
+//                            sb.append(" / ");
+//                        }
+//                    }
+//
+//                    sb.append(as);
+//                    seen.add(as);
+//                }
+//
+//                i++;
             }
 
-            if (ctr.isUsed(this)) {
-                sb.append("=#").append(newNum).append(": ");
-            }
-            ctr.pop(this);
+            return String.join("\n", seen);
+
+//            if (ctr.isUsed(this)) {
+//                sb.append("=#").append(newNum).append(": ");
+//            }
+//            ctr.pop(this);
         }
         return sb.toString();
     }

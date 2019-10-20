@@ -138,8 +138,6 @@ class Linker {
 
             List<Type> types = bindings.stream().map(b -> b.type).collect(Collectors.toList());
 
-
-
             for(Type t: types) {
                 if (t instanceof FunType) {
 
@@ -165,7 +163,7 @@ class Linker {
                         Type vals = e.getKey();
                         if (vals instanceof TupleType) {
                             TupleType params = (TupleType) vals;
-                            String paramsStr = "{";
+                            StringBuilder paramsStr = new StringBuilder("{");
 
                             if (fun.func.args.size() < params.eltTypes.size()) {
                                 $.msg("Error, in function " + qname + " " + String.join(",", params.eltTypes.stream().map(Type::toString).collect(Collectors.joining())));
@@ -176,13 +174,26 @@ class Linker {
                                 String paramName = fun.func.args.get(i).name;
 
                                 String paramType = params.eltTypes.get(i).toString();
-                                String end = i == params.eltTypes.size() - 1 ? "" : ",";
-                                paramsStr += "\\\"" + paramName + "\\\": \\\"" + paramType + "\\\"" + end;
+                                String[] allParamTypes;
+                                if (paramType.contains("\n")) {
+                                    allParamTypes = paramType.split("\n");
+                                } else {
+                                    allParamTypes = new String[]{ paramType };
+                                }
+
+                                for (String type: allParamTypes) {
+                                    String end = ",";
+                                    paramsStr.append("\\\"").append(paramName).append("\\\": \\\"").append(type).append("\\\"").append(end);
+                                }
                             }
-                            paramsStr += "}";
+                            paramsStr.setLength(paramsStr.length() - 1);
+                            paramsStr.append("}");
+
+                            String allResultTypes = e.getValue().toString();
 
 
-                            Demo.functionCalls.add(qname + '|' + paramsStr + '|' + e.getValue());
+                            for(String resultType: allResultTypes.split("\n"))
+                                Demo.functionCalls.add(qname + '|' + paramsStr + '|' + resultType);
                         }
 
                     }
