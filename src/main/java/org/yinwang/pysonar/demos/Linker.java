@@ -186,7 +186,10 @@ class Linker {
                                     paramsStr.append("\\\"").append(paramName).append("\\\": \\\"").append(type).append("\\\"").append(end);
                                 }
                             }
-                            paramsStr.setLength(paramsStr.length() - 1);
+
+                            if (paramsStr.length() > 1)
+                                paramsStr.setLength(paramsStr.length() - 1);
+
                             paramsStr.append("}");
 
                             String allResultTypes = e.getValue().toString();
